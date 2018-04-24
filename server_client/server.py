@@ -3,6 +3,7 @@ import socket, threading, os, random
 open(os.getcwd() + "/stuff.txt", 'w').close()
 f = open(os.getcwd() + "/stuff.txt", 'r+')
 
+
 class ThreadedServer(object):
     def __init__(self, host, port):
         self.host = host
@@ -17,12 +18,16 @@ class ThreadedServer(object):
         while True:
             client, address = self.sock.accept()
             client.settimeout(60)
-            print (address[1], "Connected")
-            threading.Thread(target = self.listenToClient,args = (client,address)).start()
+            print(address[1], "Connected")
+            threading.Thread(target=self.listen_to_client, args=(client, address)).start()
 
-    def listenToClient(self, client, address):
-        if (client.recv(1024)).decode('utf-8') == '0':
-            print (address[1], "Mode 0")
+    def listen_to_client(self, client, address):
+        received = client.recv(1024).decode('utf-8')
+        print(type(received))
+        print(received)
+
+        if received== '0':
+            print(address[1], "Mode 0")
             while True:
                 try:
                     data = (client.recv(1024)).decode('utf-8')
@@ -39,8 +44,8 @@ class ThreadedServer(object):
                 except:
                     client.close()
                     return False
-        if (client.recv(1024)).decode('utf-8') == '1':
-            print (address[1], "Mode 1")
+        if received == '1':
+            print(address[1], "Mode 1")
             hidden = random.randint(0,10)
             print(hidden)
             while True:
@@ -53,7 +58,7 @@ class ThreadedServer(object):
                         else:
                             if data == str(hidden):
                                 client.send('Won'.encode('utf-8'))
-                                print (address[1], "Got it Ending Connection")
+                                print(address[1], "Got it Ending Connection")
                                 break
                             else:
                                 client.send("Fail".encode('utf-8'))
@@ -62,9 +67,6 @@ class ThreadedServer(object):
                     return False
 
 
-
-
 if __name__ == "__main__":
-    #port_num = int(input("Port? "))
     port_num = 5000
-    ThreadedServer('',port_num).listen()
+    ThreadedServer('', port_num).listen()
