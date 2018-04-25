@@ -26,7 +26,7 @@ class ThreadedServer(object):
         print(type(received))
         print(received)
 
-        if received== '0':
+        if received == '0':
             print(address[1], "Mode 0")
             while True:
                 try:
@@ -40,14 +40,13 @@ class ThreadedServer(object):
                             response = 'ack'
                             client.send(response.encode('utf-8'))
                     else:
-                        raise error('Client disconnected')
-                except:
+                        raise Exception("Client disconnected")
+                except socket.timeout:
                     client.close()
                     return False
         if received == '1':
             print(address[1], "Mode 1")
             hidden = random.randint(0,10)
-            print(hidden)
             while True:
                 try:
                     data = (client.recv(1024)).decode('utf-8')

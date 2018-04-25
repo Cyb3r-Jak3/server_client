@@ -37,10 +37,10 @@ def mode1():
             break
 
 
-chocie = input('Mode?\n')
-if chocie == '0':
+choice = input('Mode?\n')
+if choice == '0':
     mode0()
-if chocie == '1':
+if choice == '1':
     mode1()
 
 s.close()
