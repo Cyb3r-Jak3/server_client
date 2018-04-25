@@ -1,15 +1,53 @@
-import socketserver
+import socketserver, os, random
+# Clears the stuff file
+open(os.getcwd() + "/stuff.txt", 'w').close()
+f = open(os.getcwd() + "/stuff.txt", 'r+')
 
 
 class TCPHandler(socketserver.BaseRequestHandler):
 
     def handle(self):
-        # self.request is the TCP socket connected to the client
-        self.data = self.request.recv(1024).decode("utf-8")
-        print("{} wrote:".format(self.client_address[0]))
-        print(self.data)
-        # just send back the same data, but upper-cased
-        self.request.send(self.data.upper().encode("utf-8"))
+        client, address = self.client_address
+        received = self.request.recv(1024).decode('utf-8')
+
+        if received == '0':
+            print(address, "Mode 0")
+            while True:
+                try:
+                    data = (self.request.recv(1024)).decode('utf-8')
+                    if data:
+                        if data == 'break':
+                            print(address, 'Connection ended')
+                            return False
+                        else:
+                            f.write('{} {}\n'.format(address, data))
+                            response = 'ack'
+                            self.request.send(response.encode('utf-8'))
+                    else:
+                        raise Exception("Client disconnected")
+                except Exception as e:
+                    self.request.close()
+                    return False
+        if received == '1':
+            print(address, "Mode 1")
+            hidden = random.randint(0, 10)
+            while True:
+                try:
+                    data = (self.request.recv(1024)).decode('utf-8')
+                    if data:
+                        if data == 'break':
+                            print(address, 'Connection ended')
+                            return False
+                        else:
+                            if data == str(hidden):
+                                self.request.send('Won'.encode('utf-8'))
+                                print(address, "Got it. Ending Connection")
+                                break
+                            else:
+                                self.request.send("Fail".encode('utf-8'))
+                except Exception as e:
+                    self.request.close()
+                    return False
 
 
 if __name__ == "__main__":
