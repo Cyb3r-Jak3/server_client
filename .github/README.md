@@ -3,6 +3,10 @@
 #### Written for python 3+
 ---
 This is designed as a demo for using socket in python.  
+Both versions allow for multiple clients.  
+I am leaving V1 in as I believe that it is easier to understand for starting sockets.  
+V2 is the one I will continue to develop
+
 There are currently two modes, the first one is the client sending messages to the server which writes them to stuff.txt. The second mode is a random number guessing game where the client guesses number from 1 to 10.  
 To use:  
 ```
