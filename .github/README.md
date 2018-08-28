@@ -17,7 +17,7 @@ To run:
 python3 server.py
 python3 client.py
 ``` 
-(Quick note: You will two seperate terminals sessions. 1 for server and 1 for client)
+(Quick note: You will two separate terminals sessions. 1 for server and 1 for client)
   
 1. Mode0:  
     -  Send Text: The client connect to the server and sends text to the server which writes it out in stuff.txt. Type "break" to end the session

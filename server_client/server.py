@@ -1,10 +1,13 @@
-import socketserver, os, random
+import socketserver
+import os
+import random
+import threading
 # Clears the stuff file
 open(os.getcwd() + "/stuff.txt", 'w').close()
 f = open(os.getcwd() + "/stuff.txt", 'r+')
 
 
-class TCPHandler(socketserver.BaseRequestHandler):
+class ThreadedTCPRequestHandler(socketserver.BaseRequestHandler):
 
     def handle(self):
         client, address = self.client_address
@@ -51,10 +54,14 @@ class TCPHandler(socketserver.BaseRequestHandler):
 
 
 if __name__ == "__main__":
-    host, port = "localhost", 9999
+    host, port = "localhost", 9998
 
     # Create the server, binding to localhost on port 9999
-    with socketserver.TCPServer((host, port), TCPHandler) as server:
+    with socketserver.ThreadingTCPServer((host, port), ThreadedTCPRequestHandler) as server:
         # Activate the server; this will keep running until you
         # interrupt the program with Ctrl-C
+        server_thread = threading.Thread(target=server.serve_forever)
+        server_thread.daemon = True
+        server_thread.start()
         server.serve_forever()
+

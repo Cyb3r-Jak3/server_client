@@ -1,6 +1,6 @@
 import socket
 
-host, port = "localhost", 9999
+host, port = "localhost", 9998
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 print('Socket Made')
